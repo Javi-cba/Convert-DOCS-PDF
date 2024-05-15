@@ -36,3 +36,29 @@
     transform: rotate(360deg);
   }
 }
+.linkDescargar {
+  text-decoration: none;
+  color: white;
+}
+.inputfile {
+  width: 700px;
+  height: 300px;
+  border: 2px dashed #ccc;
+  text-align: center;
+  line-height: 300px;
+}
+.inputfile:hover {
+  background-color: rgba(126, 123, 123, 0.692);
+  width: 700px;
+  height: 300px;
+  border: 2px dashed #ccc;
+  text-align: center;
+  line-height: 300px;
+}
+.imgArchivo {
+  width: 60px;
+  height: 60px;
+}
+.navb {
+  background-color: #e3f2fd;
+}
