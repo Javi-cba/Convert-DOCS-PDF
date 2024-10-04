@@ -28,7 +28,7 @@ export async function convertWordToPdf(base64String) {
       }
     );
 
-    return response.data;
+    return response.data.Files[0].Url;
   } catch (error) {
     console.error(error);
     return error;

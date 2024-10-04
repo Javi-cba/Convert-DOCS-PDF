@@ -24,8 +24,9 @@ const Convertdoccpm = () => {
         setFileInfo({ name, size, type });
 
         const base64String = await fileToBase64(file);
-        const resp = convertWordToPdf(base64String);
-        setUrlPdf(resp.data.Files[0].Url);
+        const resp = await convertWordToPdf(base64String);
+
+        setUrlPdf(resp);
       } catch (error) {
         console.error('Error al acceder al archivo:', error);
       }
@@ -60,8 +61,8 @@ const Convertdoccpm = () => {
           Arrastra y suelta un archivo
         </div>
         {fileInfo && (
-          <div className=" col-4 ">
-            <div className="text-white border border-black rounded d-flex">
+          <div className=" col-6 ">
+            <div className="text-white border m-2 border-black rounded d-flex">
               <img
                 className="imgArchivo p-2"
                 alt="img"
