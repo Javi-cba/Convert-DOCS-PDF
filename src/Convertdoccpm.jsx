@@ -1,21 +1,21 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useEffect, useState } from 'react';
+import { convertWordToPdf } from './services/apiConvert';
 
 const Convertdoccpm = () => {
   const [UrlPdf, setUrlPdf] = useState(null);
   const [fileInfo, setFileInfo] = useState(null);
 
   // Función para convertir un archivo a base64
-  const fileToBase64 = (file) => {
+  const fileToBase64 = file => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result.split(",")[1]);
-      reader.onerror = (error) => reject(error);
+      reader.onload = () => resolve(reader.result.split(',')[1]);
+      reader.onerror = error => reject(error);
     });
   };
   useEffect(() => {
-    const handleDrop = async (event) => {
+    const handleDrop = async event => {
       // cuando se suelta un archivo
       event.preventDefault();
       const file = event.dataTransfer.files[0];
@@ -23,35 +23,28 @@ const Convertdoccpm = () => {
         const { name, size, type } = file;
         setFileInfo({ name, size, type });
 
-        fileToBase64(file).then((base64String) => {
-          axios
-            .post("http://localhost:3100/convertword", {
-              base64String: base64String,
-            })
-            .then((resp) => {
-              console.log(resp.data);
-              setUrlPdf(resp.data.Files[0].Url);
-            });
-        });
+        const base64String = await fileToBase64(file);
+        const resp = convertWordToPdf(base64String);
+        setUrlPdf(resp.data.Files[0].Url);
       } catch (error) {
-        console.error("Error al acceder al archivo:", error);
+        console.error('Error al acceder al archivo:', error);
       }
     };
 
     // Manejador de eventos para cuando se arrastra un archivo sobre el área de soltar
-    const handleDragOver = (event) => {
+    const handleDragOver = event => {
       event.preventDefault();
     };
 
-    const dropArea = document.getElementById("dropArea");
+    const dropArea = document.getElementById('dropArea');
     if (dropArea) {
-      dropArea.addEventListener("dragover", handleDragOver);
-      dropArea.addEventListener("drop", handleDrop);
+      dropArea.addEventListener('dragover', handleDragOver);
+      dropArea.addEventListener('drop', handleDrop);
 
       // Retornar una función de limpieza para remover los event listeners cuando el componente se desmonte
       return () => {
-        dropArea.removeEventListener("dragover", handleDragOver);
-        dropArea.removeEventListener("drop", handleDrop);
+        dropArea.removeEventListener('dragover', handleDragOver);
+        dropArea.removeEventListener('drop', handleDrop);
       };
     }
   }, []);
